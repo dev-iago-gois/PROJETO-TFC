@@ -6,9 +6,8 @@ export interface ICRUDModelCreator<T> {
 }
 
 export interface ICRUDModelReader<T> {
-  findAll(): Promise<T[]>,
-  findById?(id: ID): Promise<T | null>,
-  // TODO REMOVER O ? ACIMA NO FIND BY ID
+  getAll(): Promise<T[]>,
+  getById(id: ID): Promise<T | null>,
 }
 
 export interface ICRUDModelUpdater<T> {

@@ -12,7 +12,7 @@ class SequelizeTeam extends Model<InferAttributes<SequelizeTeam>,
 InferCreationAttributes<SequelizeTeam>> {
   declare id: CreationOptional<number>;
 
-  declare teamName: CreationOptional<string>;
+  declare teamName: string;
 }
 
 SequelizeTeam.init({

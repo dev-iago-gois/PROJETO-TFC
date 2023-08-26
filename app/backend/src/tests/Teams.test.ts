@@ -5,8 +5,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import TeamModel from '../models/TeamModel';
-import { teams } from './mocks/Team.mocks';
+import { teams, team } from './mocks/Team.mocks';
 import SequelizeTeam from '../database/models/SequelizeTeams';
 // import Validations from '../../src/middlewares/Validations';
 // import JWT from '../../src/utils/JWT';
@@ -16,7 +15,7 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe('Books Test', function() {
-  it.only('should return all books', async function() {
+  it('should return all teams', async function() {
     // const mock = SequelizeTeam.build(teams[0]);
     sinon.stub(SequelizeTeam, 'findAll').resolves(teams as any);
 
@@ -26,14 +25,14 @@ describe('Books Test', function() {
     expect(body).to.deep.equal(teams);
   });
 
-  // it('should return a book by id', async function() {
-  //   sinon.stub(SequelizeBook, 'findOne').resolves(book as any);
+  it('should return a team by id', async function() {
+    sinon.stub(SequelizeTeam, 'findByPk').resolves(team as any);
 
-  //   const { status, body } = await chai.request(app).get('/books/1');
+    const { status, body } = await chai.request(app).get('/teams/1');
 
-  //   expect(status).to.equal(200);
-  //   expect(body).to.deep.equal(book);
-  // });
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(team);
+  });
 
   // it('should return not found if the book doesn\'t exists', async function() {
   //   sinon.stub(SequelizeBook, 'findOne').resolves(null);

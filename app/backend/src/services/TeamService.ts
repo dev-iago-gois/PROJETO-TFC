@@ -6,11 +6,19 @@ import { ServiceResponse } from '../Interfaces/ServiceResponse';
 
 export default class TeamService {
   constructor(
-    private teamMode: ITeamModel = new TeamModel(),
+    private teamModel: ITeamModel = new TeamModel(),
   ) {}
 
-  async findAll(): Promise<ServiceResponse<ITeam[]>> {
-    const allTeams = await this.teamMode.findAll();
+  async getAll(): Promise<ServiceResponse<ITeam[]>> {
+    const allTeams = await this.teamModel.getAll();
     return { status: 'SUCCESSFUL', data: allTeams };
+  }
+
+  async getById(id: number): Promise<ServiceResponse<ITeam>> {
+    const team = await this.teamModel.getById(id);
+
+    if (!team) return { status: 'NOT_FOUND', data: { message: `Team ${id} not found` } };
+
+    return { status: 'SUCCESSFUL', data: team };
   }
 }

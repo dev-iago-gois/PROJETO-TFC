@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import mapStatusHTTP from '../utils/mapStatusHTTP';
 import TeamService from '../services/TeamService';
 // import mapStatusHTTP from '../utils/mapStatusHTTP';
 
@@ -8,18 +9,20 @@ export default class TeamController {
   ) {
   }
 
-  public async findAll(_req: Request, res: Response): Promise<Response> {
-    // try {
-    //   const teams = await this.teamService.getAll();
+  public async getAll(_req: Request, res: Response): Promise<Response> {
+    const serviceResponse = await this.teamService.getAll();
 
-    //   return res.status(200).json(teams);
-    // } catch (error) {
-    //   return res.status(500).json({
-    //     error: 'Internal server error',
-    //     message: error.message,
-    //   });
-    // }
-    const serviceResponse = await this.teamService.findAll();
+    return res.status(200).json(serviceResponse.data);
+  }
+
+  public async getById(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+
+    const serviceResponse = await this.teamService.getById(Number(id));
+
+    if (serviceResponse.status !== 'SUCCESSFUL') {
+      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+    }
 
     return res.status(200).json(serviceResponse.data);
   }

@@ -11,18 +11,22 @@ export default class TeamModel implements ITeamModel {
   //   return team;
   // }
 
-  async findAll(): Promise<ITeam[]> {
+  async getAll(): Promise<ITeam[]> {
     const teams = await this.model.findAll();
-    console.log(teams);
+    // console.log(teams);
 
     return teams;
   }
 
-  // public async findById(id: number): Promise<ITeam | null> {
-  //   const team = await SequelizeTeam.findByPk(id);
+  async getById(id: ITeam['id']): Promise<ITeam | null> {
+    const team = await this.model.findByPk(id);
+    console.log(team == null);
 
-  //   return team;
-  // }
+    if (team == null) return null;
+
+    const { teamName }: ITeam = team;
+    return { id, teamName };
+  }
 
   // public async update(id: number, data: ITeam): Promise<ITeam | null> {
   //   const team = await SequelizeTeam.findByPk(id);
