@@ -33,7 +33,8 @@ describe('Books Test', function() {
     expect(status).to.equal(200);
     expect(body).to.deep.equal(team);
   });
-
+// TODO 2 TESTES, 1 - NA SE A RESPOSTA DE GETBYID NAO FOR SUCESSO
+// 2 - SE NAO ACHAR UM TIME E RETORNAR NULL
   // it('should return not found if the book doesn\'t exists', async function() {
   //   sinon.stub(SequelizeBook, 'findOne').resolves(null);
 
