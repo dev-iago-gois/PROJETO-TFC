@@ -18,13 +18,9 @@ export default class LoginController {
   }
 
   public async getRole(req: Request, res: Response): Promise<Response> {
-    const token = req.headers.authorization;
+    const verifiedUser = req.body.user;
 
-    if (!token) {
-      return res.status(401).json({ message: 'Token not found' });
-    }
-    const actualToken = token.split(' ');
-    const serviceResponse = await this.loginService.getRole(actualToken[1]);
+    const serviceResponse = await this.loginService.getRole(verifiedUser);
 
     return res.status(200).json(serviceResponse.data);
   }
