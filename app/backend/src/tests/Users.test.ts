@@ -158,6 +158,35 @@ describe('Login Test', function() {
     expect(body.message).to.equal('Invalid email or password');
   });
 
+  it('should return status 200 and a role when a valid token is provided', async function() {
+    sinon.stub(JWT, 'verify').resolves({ email: 'admin@admin.com' });
+    sinon.stub(SequelizeUser, 'findOne').resolves(user as any);
+
+    const { role } = user;
+
+    const { status, body } = await chai.request(app).get('/login/role')
+      .set('authorization', 'Bearer VALIDTOKEN');
+
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal({ role });
+  });
+
+  it('should return status 401 and error message when no token is provided', async function() {
+    const { status, body } = await chai.request(app).get('/login/role');
+
+    expect(status).to.equal(401);
+    expect(body.message).to.equal('Token not found');
+  });
+
+  it('should return status 401 and error message when a invalid token is provided', async function() {
+    sinon.stub(JWT, 'verify').resolves('Token must be a valid token');
+    const { status, body } = await chai.request(app).get('/login/role')
+      .set('authorization', 'Bearer VALIDTOKEN');
+
+    expect(status).to.equal(401);
+    expect(body.message).to.equal('Token must be a valid token');
+  });
+
   // it('shouldn\'t login with an invalid body data', async function() {
   //   const { status, body } = await chai.request(app).post('/users/login')
   //     .send({});
