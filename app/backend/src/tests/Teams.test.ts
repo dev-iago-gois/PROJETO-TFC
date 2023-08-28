@@ -14,7 +14,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Books Test', function() {
+describe('Integration - Teams', function() {
   it('should return all teams', async function() {
     // const mock = SequelizeTeam.build(teams[0]);
     sinon.stub(SequelizeTeam, 'findAll').resolves(teams as any);
@@ -33,16 +33,15 @@ describe('Books Test', function() {
     expect(status).to.equal(200);
     expect(body).to.deep.equal(team);
   });
-// TODO 2 TESTES, 1 - NA SE A RESPOSTA DE GETBYID NAO FOR SUCESSO
-// 2 - SE NAO ACHAR UM TIME E RETORNAR NULL
-  // it('should return not found if the book doesn\'t exists', async function() {
-  //   sinon.stub(SequelizeBook, 'findOne').resolves(null);
 
-  //   const { status, body } = await chai.request(app).get('/books/1');
+  it('should return not found if the team doesn\'t exists', async function() {
+    sinon.stub(SequelizeTeam, 'findByPk').resolves(null);
 
-  //   expect(status).to.equal(404);
-  //   expect(body.message).to.equal('Book 1 not found');
-  // });
+    const { status, body } = await chai.request(app).get('/teams/999999');
+
+    expect(status).to.equal(404);
+    expect(body.message).to.equal('Team 999999 not found');
+  });
 
   // it('should create a book', async function() {
   //   sinon.stub(SequelizeBook, 'create').resolves(book as any);

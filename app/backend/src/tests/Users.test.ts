@@ -5,163 +5,205 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import { teams, team } from './mocks/Team.mocks';
-// import Validations from '../../src/middlewares/Validations';
-// import JWT from '../../src/utils/JWT';
+import { invalidPasswordLoginBody, user, validLoginBody, wrongPassUser } from './mocks/Login.mocks';
+import Validations from '../../src/middlewares/Validations';
+import JWT from '../../src/utils/JWT';
 
-import SequelizeTeam from '../database/models/SequelizeTeams';
+import SequelizeUser from '../database/models/SequelizeUsers';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe.skip('Users Test', function() {
-  it('should return all users', async function() {
-    sinon.stub(SequelizeUser, 'findAll').resolves(users as any);
+// describe.skip('Users Test', function() {
+//   it('should return all users', async function() {
+//     sinon.stub(SequelizeUser, 'findAll').resolves(users as any);
 
-    const { status, body } = await chai.request(app).get('/users');
+//     const { status, body } = await chai.request(app).get('/users');
 
-    expect(status).to.equal(200);
-    expect(body).to.deep.equal(users);
-  });
+//     expect(status).to.equal(200);
+//     expect(body).to.deep.equal(users);
+//   });
 
-  it('should return a user by id', async function() {
-    sinon.stub(SequelizeUser, 'findByPk').resolves(userWithoutPassword as any);
+//   it('should return a user by id', async function() {
+//     sinon.stub(SequelizeUser, 'findByPk').resolves(userWithoutPassword as any);
 
-    const { status, body } = await chai.request(app).get('/users/1');
+//     const { status, body } = await chai.request(app).get('/users/1');
 
-    expect(status).to.equal(200);
-    expect(body).to.deep.equal(userWithoutPassword);
-  });
+//     expect(status).to.equal(200);
+//     expect(body).to.deep.equal(userWithoutPassword);
+//   });
 
-  it('should return a message when user is not found', async function() {
-    sinon.stub(SequelizeUser, 'findByPk').resolves(null);
+//   it('should return a message when user is not found', async function() {
+//     sinon.stub(SequelizeUser, 'findByPk').resolves(null);
 
-    const { status, body } = await chai.request(app).get('/users/1');
+//     const { status, body } = await chai.request(app).get('/users/1');
 
-    expect(status).to.equal(404);
-    expect(body.message).to.equal('User not found');
-  });
+//     expect(status).to.equal(404);
+//     expect(body.message).to.equal('User not found');
+//   });
 
-  it('should create a user', async function() {
-    sinon.stub(SequelizeUser, 'create').resolves(user as any);
-    sinon.stub(SequelizeUser, 'findOne').resolves(null);
-    sinon.stub(JWT, 'verify').resolves();
-    sinon.stub(Validations, 'validateUser').returns();
+//   it('should create a user', async function() {
+//     sinon.stub(SequelizeUser, 'create').resolves(user as any);
+//     sinon.stub(SequelizeUser, 'findOne').resolves(null);
+//     sinon.stub(JWT, 'verify').resolves();
+//     sinon.stub(Validations, 'validateUser').returns();
 
-    const { id, email, name, password } = user;
+//     const { id, email, name, password } = user;
 
-    const { status, body } = await chai.request(app).post('/users/register')
-      .set('authorization', 'validToken')
-      .send({ email, name, password });
+//     const { status, body } = await chai.request(app).post('/users/register')
+//       .set('authorization', 'validToken')
+//       .send({ email, name, password });
 
-    expect(status).to.equal(201);
-    expect(body).to.deep.equal({ id, email, name });
-  });
+//     expect(status).to.equal(201);
+//     expect(body).to.deep.equal({ id, email, name });
+//   });
 
-  it('shouldn\'t create a user without a token', async function() {
-    const { status, body } = await chai.request(app).post('/users/register');
+//   it('shouldn\'t create a user without a token', async function() {
+//     const { status, body } = await chai.request(app).post('/users/register');
 
-    expect(status).to.equal(404);
-    expect(body.message).to.equal('Token not found');
-  });
+//     expect(status).to.equal(404);
+//     expect(body.message).to.equal('Token not found');
+//   });
 
-  it('shouldn\'t create a user with an invalid token', async function() {
-    const { status, body } = await chai.request(app)
-      .post('/users/register')
-      .set('authorization', 'invalidToken');
+//   it('shouldn\'t create a user with an invalid token', async function() {
+//     const { status, body } = await chai.request(app)
+//       .post('/users/register')
+//       .set('authorization', 'invalidToken');
 
-    expect(status).to.equal(401);
-    expect(body.message).to.equal('Token must be a valid token');
-  });
+//     expect(status).to.equal(401);
+//     expect(body.message).to.equal('Token must be a valid token');
+//   });
 
-  it('shouldn\'t create a user with invalid body data', async function() {
-    sinon.stub(JWT, 'verify').resolves();
+//   it('shouldn\'t create a user with invalid body data', async function() {
+//     sinon.stub(JWT, 'verify').resolves();
 
-    const { status, body } = await chai.request(app).post('/users/register')
-      .set('authorization', 'validToken')
-      .send({});
+//     const { status, body } = await chai.request(app).post('/users/register')
+//       .set('authorization', 'validToken')
+//       .send({});
 
-    expect(status).to.equal(400);
-    expect(body.message).to.equal('email is required');
-  });
+//     expect(status).to.equal(400);
+//     expect(body.message).to.equal('email is required');
+//   });
 
-  it('shouldn\'t create a user with an already existent email', async function() {
-    sinon.stub(JWT, 'verify').resolves();
-    sinon.stub(Validations, 'validateUser').returns();
-    sinon.stub(SequelizeUser, 'findOne').resolves(user as any);
+//   it('shouldn\'t create a user with an already existent email', async function() {
+//     sinon.stub(JWT, 'verify').resolves();
+//     sinon.stub(Validations, 'validateUser').returns();
+//     sinon.stub(SequelizeUser, 'findOne').resolves(user as any);
 
-    const { status, body } = await chai.request(app).post('/users/register')
-      .set('authorization', 'validToken')
-      .send(user);
+//     const { status, body } = await chai.request(app).post('/users/register')
+//       .set('authorization', 'validToken')
+//       .send(user);
 
-    expect(status).to.equal(409);
-    expect(body.message).to.equal('User already exists');
-  });
+//     expect(status).to.equal(409);
+//     expect(body.message).to.equal('User already exists');
+//   });
 
-  afterEach(sinon.restore);
-});
-// TODO testes para login
+//   afterEach(sinon.restore);
+// });
+// TODO testes para login req 7 9 e 11
 describe('Login Test', function() {
   it('should return a token when login is done', async function() {
-    sinon.stub(SequelizeUser, 'findOne').resolves(userRegistered as any);
+    sinon.stub(SequelizeUser, 'findOne').resolves(user as any);
     sinon.stub(JWT, 'sign').returns('validToken');
-    sinon.stub(Validations, 'validateUser').returns();
+    sinon.stub(Validations, 'validateLogin').returns();
 
     const { status, body } = await chai.request(app)
-      .post('/users/login')
+      .post('/login')
       .send(validLoginBody);
 
     expect(status).to.equal(200);
     expect(body).to.have.key('token');
   });
 
-  it('shouldn\'t login with an invalid body data', async function() {
-    const { status, body } = await chai.request(app).post('/users/login')
-      .send({});
+  it('should return status 401 and an error message when an incorrect password is provided', async function() {
+    sinon.stub(SequelizeUser, 'findOne').resolves(wrongPassUser as any);
+    sinon.stub(JWT, 'sign').returns('validToken');
+    sinon.stub(Validations, 'validateLogin').returns();
 
-    expect(status).to.equal(400);
-    expect(body).to.be.deep.equal({ message: 'All fields must be filled' });
-  });
-
-  it('shouldn\'t login with an invalid email', async function() {
-    const { status, body } = await chai.request(app).post('/users/login')
-      .send(invalidEmailLoginBody);
+    const { status, body } = await chai.request(app)
+      .post('/login')
+      .send(validLoginBody);
 
     expect(status).to.equal(401);
-    expect(body).to.be.deep.equal({ message: 'Invalid email' });
+    expect(body.message).to.equal('Invalid email or password');
   });
 
-  it('shouldn\'t login with an invalid password', async function() {
-    const { status, body } = await chai.request(app).post('/users/login')
-      .send(invalidPasswordLoginBody);
-
-    expect(status).to.equal(401);
-    expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
-  });
-
-  it('shouldn\'t login when user is not found', async function() {
+  it('should return status 401 and an error message when an incorrect email is provided', async function() {
     sinon.stub(SequelizeUser, 'findOne').resolves(null);
 
     const { status, body } = await chai.request(app)
-      .post('/users/login')
-      .send(validLoginBody);
-    expect(status).to.equal(404);
-    expect(body).to.be.deep.equal({ message: 'User not found' });
-  });
-
-  it('should return invalid data when user password is wrong', async function() {
-    sinon.stub(SequelizeUser, 'findOne').resolves(wrongPassUser as any);
-    sinon.stub(JWT, 'sign').returns('validToken');
-    sinon.stub(Validations, 'validateUser').returns();
-
-    const { status, body } = await chai.request(app)
-      .post('/users/login')
+      .post('/login')
       .send(validLoginBody);
 
-    expect(status).to.equal(400);
+    expect(status).to.equal(401);
     expect(body.message).to.equal('Invalid email or password');
   });
+
+  it('should return status 400 when a empty email or password is provided', async function() {
+    const { status, body } = await chai.request(app)
+      .post('/login')
+      .send({});
+
+    expect(status).to.equal(400);
+    expect(body.message).to.equal('All fields must be filled');
+  });
+
+  it('should return status 401 when a invalid email or password is provided', async function() {
+    const { status, body } = await chai.request(app)
+      .post('/login')
+      .send(invalidPasswordLoginBody);
+
+    expect(status).to.equal(401);
+    expect(body.message).to.equal('Invalid email or password');
+  });
+
+  // it('shouldn\'t login with an invalid body data', async function() {
+  //   const { status, body } = await chai.request(app).post('/users/login')
+  //     .send({});
+
+  //   expect(status).to.equal(400);
+  //   expect(body).to.be.deep.equal({ message: 'All fields must be filled' });
+  // });
+
+  // it('shouldn\'t login with an invalid email', async function() {
+  //   const { status, body } = await chai.request(app).post('/users/login')
+  //     .send(invalidEmailLoginBody);
+
+  //   expect(status).to.equal(401);
+  //   expect(body).to.be.deep.equal({ message: 'Invalid email' });
+  // });
+
+  // it('shouldn\'t login with an invalid password', async function() {
+  //   const { status, body } = await chai.request(app).post('/users/login')
+  //     .send(invalidPasswordLoginBody);
+
+  //   expect(status).to.equal(401);
+  //   expect(body).to.be.deep.equal({ message: 'Invalid email or password' });
+  // });
+
+  // it('shouldn\'t login when user is not found', async function() {
+  //   sinon.stub(SequelizeUser, 'findOne').resolves(null);
+
+  //   const { status, body } = await chai.request(app)
+  //     .post('/users/login')
+  //     .send(validLoginBody);
+  //   expect(status).to.equal(404);
+  //   expect(body).to.be.deep.equal({ message: 'User not found' });
+  // });
+
+  // it('should return invalid data when user password is wrong', async function() {
+  //   sinon.stub(SequelizeUser, 'findOne').resolves(wrongPassUser as any);
+  //   sinon.stub(JWT, 'sign').returns('validToken');
+  //   sinon.stub(Validations, 'validateUser').returns();
+
+  //   const { status, body } = await chai.request(app)
+  //     .post('/users/login')
+  //     .send(validLoginBody);
+
+  //   expect(status).to.equal(400);
+  //   expect(body.message).to.equal('Invalid email or password');
+  // });
 
   afterEach(sinon.restore);
 });
