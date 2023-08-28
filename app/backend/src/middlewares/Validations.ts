@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-// import JWT from '../utils/JWT';
+import JWT from '../utils/JWT';
 
 class Validations {
   // static validateBook(req: Request, res: Response, next: NextFunction): Response | void {
@@ -26,18 +26,22 @@ class Validations {
     next();
   }
   // TODO VALIDACAO DO TOKEN ABAIXO
-  // static async validateToken(req: Request, res: Response, next: NextFunction):
-  // Promise<Response | void> {
-  //   const token = req.headers.authorization;
-  //   if (!token) {
-  //     return res.status(404).json({ message: 'Token not found' });
-  //   }
-  //   const validToken = await JWT.verify(token);
-  //   if (validToken === 'Token must be a valid token') {
-  //     return res.status(401).json({ message: validToken });
-  //   }
-  //   next();
-  // }
+
+  static async validateToken(req: Request, res: Response, next: NextFunction):
+  Promise<Response | void> {
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({ message: 'Token not found' });
+    }
+
+    const actualToken = token.split(' ');
+    const validToken = await JWT.verify(actualToken[1]);
+
+    if (validToken === 'Token must be a valid token') {
+      return res.status(401).json({ message: validToken });
+    }
+    next();
+  }
 
   // static validateUser(req: Request, res: Response, next: NextFunction): Response | void {
   //   const user = req.body;

@@ -5,6 +5,7 @@ import { ILoginModel } from '../Interfaces/login/ILoginModel';
 import { ServiceMessage, ServiceResponse } from '../Interfaces/ServiceResponse';
 import JWT from '../utils/JWT';
 import { IToken } from '../Interfaces/IToken';
+import { IRole } from '../Interfaces/users/IRole';
 
 export default class TeamService {
   constructor(
@@ -23,5 +24,15 @@ export default class TeamService {
       return { status: 'SUCCESSFUL', data: { token } };
     }
     return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
+  }
+
+  public async getRole(token: string): Promise<ServiceResponse<ServiceMessage | IRole>> {
+    const validToken = await this.jwtService.verify(token);
+
+    const { email } = validToken as IUser;
+    const user = await this.loginModel.findByEmail(email);
+
+    const { role } = user as IUser;
+    return { status: 'SUCCESSFUL', data: { role } };
   }
 }

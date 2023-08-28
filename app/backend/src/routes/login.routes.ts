@@ -7,7 +7,7 @@ const loginController = new LoginController();
 const router = Router();
 
 router.post('/', Validations.validateLogin, (req, res) => loginController.login(req, res));
-
+router.get('/role', Validations.validateToken, (req, res) => loginController.getRole(req, res));
 // // router.post(
 // //   '/register',
 // //   Validations.validateToken,

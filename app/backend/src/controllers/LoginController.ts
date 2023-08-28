@@ -16,4 +16,16 @@ export default class LoginController {
     }
     return res.status(200).json(serviceResponse.data);
   }
+
+  public async getRole(req: Request, res: Response): Promise<Response> {
+    const token = req.headers.authorization;
+
+    if (!token) {
+      return res.status(401).json({ message: 'Token not found' });
+    }
+    const actualToken = token.split(' ');
+    const serviceResponse = await this.loginService.getRole(actualToken[1]);
+
+    return res.status(200).json(serviceResponse.data);
+  }
 }
