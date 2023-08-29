@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import MatchController from '../controllers/MatchController';
-// import Validations from '../middlewares/Validations';
+import Validations from '../middlewares/Validations';
 
 const matchController = new MatchController();
 
@@ -13,6 +13,12 @@ router.get(
     if (inProgress) return matchController.inProgress(req, res);
     matchController.getAll(req, res);
   },
+);
+
+router.patch(
+  '/:id/finish',
+  Validations.validateToken,
+  (req: Request, res: Response) => matchController.finish(req, res),
 );
 
 // router.get(

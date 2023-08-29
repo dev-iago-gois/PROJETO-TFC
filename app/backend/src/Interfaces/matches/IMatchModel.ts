@@ -6,6 +6,7 @@ export type ID = number;
 // TODO REMOVE THIS LATTER
 interface IMatchModelQueryString<T> {
   inProgress(inProgress: string): Promise<T[]>,
+  finish(id: number): Promise<void>,
 }
 
 export interface ICRUDModelReader<T> {

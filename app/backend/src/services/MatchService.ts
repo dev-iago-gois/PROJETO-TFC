@@ -1,7 +1,7 @@
 // import { NewEntity } from "../Interfaces/ICRUDModel";
 import MatchModel from '../models/MatchModel';
 import { IMatchModel } from '../Interfaces/matches/IMatchModel';
-import { ServiceResponse } from '../Interfaces/ServiceResponse';
+import { ServiceMessage, ServiceResponse } from '../Interfaces/ServiceResponse';
 import IMatch from '../Interfaces/matches/IMatch';
 
 export default class MatchService {
@@ -17,6 +17,11 @@ export default class MatchService {
   async inProgress(inProgress: string): Promise<ServiceResponse<IMatch[]>> {
     const matches = await this.matchModel.inProgress(inProgress);
     return { status: 'SUCCESSFUL', data: matches };
+  }
+
+  async finish(id: number): Promise<ServiceResponse<ServiceMessage>> {
+    await this.matchModel.finish(id);
+    return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
   }
 
   // async getById(id: number): Promise<ServiceResponse<ITeam>> {

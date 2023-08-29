@@ -24,6 +24,14 @@ export default class MatchController {
     return res.status(200).json(serviceResponse.data);
   }
 
+  public async finish(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+
+    const serviceResponse = await this.matchService.finish(Number(id));
+
+    return res.status(200).json(serviceResponse.data);
+  }
+
   // public async getById(req: Request, res: Response): Promise<Response> {
   //   const { id } = req.params;
 
