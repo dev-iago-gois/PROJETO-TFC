@@ -27,7 +27,7 @@ describe('Matches Test', function() {
       .get('/matches');
 
     // Assert
-    expect(status).to.equal(201);
+    expect(status).to.equal(200);
     expect(body).to.deep.equal(allMatches);
   });
 
