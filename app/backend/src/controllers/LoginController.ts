@@ -18,9 +18,9 @@ export default class LoginController {
   }
 
   public async getRole(req: Request, res: Response): Promise<Response> {
-    const verifiedUser = req.body.user;
+    const { email } = req.body.user;
 
-    const serviceResponse = await this.loginService.getRole(verifiedUser);
+    const serviceResponse = await this.loginService.getRole(email);
 
     return res.status(200).json(serviceResponse.data);
   }

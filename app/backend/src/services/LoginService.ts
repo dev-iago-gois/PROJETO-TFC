@@ -26,10 +26,7 @@ export default class TeamService {
     return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
   }
 
-  public async getRole(token: string): Promise<ServiceResponse<ServiceMessage | IRole>> {
-    const validToken = await this.jwtService.verify(token);
-
-    const { email } = validToken as IUser;
+  public async getRole(email: string): Promise<ServiceResponse<ServiceMessage | IRole>> {
     const user = await this.loginModel.findByEmail(email);
 
     const { role } = user as IUser;
