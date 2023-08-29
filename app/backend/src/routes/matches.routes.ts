@@ -1,21 +1,21 @@
 import { Request, Response, Router } from 'express';
-import LoginController from '../controllers/LoginController';
-import Validations from '../middlewares/Validations';
+import MatchController from '../controllers/MatchController';
+// import Validations from '../middlewares/Validations';
 
-const loginController = new LoginController();
+const matchController = new MatchController();
 
 const router = Router();
 
-router.post(
-  '/',
-  Validations.validateLogin,
-  (req: Request, res: Response) => loginController.login(req, res),
-);
 router.get(
-  '/role',
-  Validations.validateToken,
-  (req: Request, res: Response) => loginController.getRole(req, res),
+  '/',
+  // Validations.validateLogin,
+  (req: Request, res: Response) => matchController.getAll(req, res),
 );
+// router.get(
+//   '/role',
+//   // Validations.validateToken,
+//   (req: Request, res: Response) => loginController.getRole(req, res),
+// );
 // // router.post(
 // //   '/register',
 // //   Validations.validateToken,
