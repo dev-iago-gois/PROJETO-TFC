@@ -4,8 +4,8 @@ import IMatch from './IMatch';
 export type ID = number;
 
 // TODO REMOVE THIS LATTER
-interface justplaceholder {
-  test?: void;
+interface IMatchModelQueryString<T> {
+  inProgress(inProgress: string): Promise<T[]>,
 }
 
 export interface ICRUDModelReader<T> {
@@ -13,4 +13,5 @@ export interface ICRUDModelReader<T> {
   getById?(id: ID): Promise<T | null>,
 }
 
-export interface IMatchModel extends ICRUDModelReader<IMatch>, justplaceholder{}
+export interface IMatchModel extends ICRUDModelReader<IMatch>, IMatchModelQueryString<IMatch>{
+}

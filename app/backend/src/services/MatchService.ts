@@ -14,6 +14,11 @@ export default class MatchService {
     return { status: 'SUCCESSFUL', data: allMatches };
   }
 
+  async inProgress(inProgress: string): Promise<ServiceResponse<IMatch[]>> {
+    const matches = await this.matchModel.inProgress(inProgress);
+    return { status: 'SUCCESSFUL', data: matches };
+  }
+
   // async getById(id: number): Promise<ServiceResponse<ITeam>> {
   //   const team = await this.teamModel.getById(id);
 

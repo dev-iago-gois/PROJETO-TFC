@@ -14,6 +14,16 @@ export default class MatchController {
     return res.status(200).json(serviceResponse.data);
   }
 
+  public async inProgress(req: Request, res: Response): Promise<Response> {
+    const { inProgress } = req.query;
+
+    if (!inProgress) return res.status(400).json({ message: 'Missing inProgress query parameter' });
+    // casting
+    const serviceResponse = await this.matchService.inProgress(JSON.parse(inProgress as string));
+
+    return res.status(200).json(serviceResponse.data);
+  }
+
   // public async getById(req: Request, res: Response): Promise<Response> {
   //   const { id } = req.params;
 

@@ -8,9 +8,18 @@ const router = Router();
 
 router.get(
   '/',
-  // Validations.validateLogin,
-  (req: Request, res: Response) => matchController.getAll(req, res),
+  (req: Request, res: Response) => {
+    const { inProgress } = req.query;
+    if (inProgress) return matchController.inProgress(req, res);
+    matchController.getAll(req, res);
+  },
 );
+
+// router.get(
+//   '/',
+//   (req: Request, res: Response) => matchController.inProgress(req, res),
+// );
+
 // router.get(
 //   '/role',
 //   // Validations.validateToken,
