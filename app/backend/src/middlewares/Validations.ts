@@ -25,7 +25,6 @@ class Validations {
 
     next();
   }
-  // TODO VALIDACAO DO TOKEN ABAIXO
 
   static async validateToken(req: Request, res: Response, next: NextFunction):
   Promise<Response | void> {
