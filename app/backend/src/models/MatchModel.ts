@@ -1,6 +1,6 @@
 import SequelizeTeam from '../database/models/SequelizeTeams';
 import SequelizeMatch from '../database/models/SequelizeMatches';
-import IMatch from '../Interfaces/matches/IMatch';
+import IMatch, { IGoals } from '../Interfaces/matches/IMatch';
 import { IMatchModel } from '../Interfaces/matches/IMatchModel';
 // import { NewEntity } from "../Interfaces/ICRUDModel";
 
@@ -32,5 +32,9 @@ export default class MatchModel implements IMatchModel {
 
   async finish(id: number): Promise<void> {
     await this.model.update({ inProgress: false }, { where: { id } });
+  }
+
+  async update(id: number, body: IGoals): Promise<void> {
+    await this.model.update(body, { where: { id } });
   }
 }

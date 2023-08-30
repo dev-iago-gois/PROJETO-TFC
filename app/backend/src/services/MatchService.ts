@@ -2,7 +2,7 @@
 import MatchModel from '../models/MatchModel';
 import { IMatchModel } from '../Interfaces/matches/IMatchModel';
 import { ServiceMessage, ServiceResponse } from '../Interfaces/ServiceResponse';
-import IMatch from '../Interfaces/matches/IMatch';
+import IMatch, { IGoals } from '../Interfaces/matches/IMatch';
 
 export default class MatchService {
   constructor(
@@ -22,6 +22,12 @@ export default class MatchService {
   async finish(id: number): Promise<ServiceResponse<ServiceMessage>> {
     await this.matchModel.finish(id);
     return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
+  }
+
+  async update(id: number, body: IGoals): Promise<ServiceResponse<ServiceMessage>> {
+    await this.matchModel.update(id, body);
+
+    return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
   }
 
   // async getById(id: number): Promise<ServiceResponse<ITeam>> {

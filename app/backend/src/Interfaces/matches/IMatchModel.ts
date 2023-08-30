@@ -1,4 +1,4 @@
-import IMatch from './IMatch';
+import IMatch, { IGoals } from './IMatch';
 // import { ICRUDModelReader } from '../ICRUDModel';
 
 export type ID = number;
@@ -7,6 +7,7 @@ export type ID = number;
 interface IMatchModelQueryString<T> {
   inProgress(inProgress: string): Promise<T[]>,
   finish(id: number): Promise<void>,
+  update(id: number, body: IGoals): Promise<void>,
 }
 
 export interface ICRUDModelReader<T> {
