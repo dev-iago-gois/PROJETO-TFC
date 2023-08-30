@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-// import mapStatusHTTP from '../utils/mapStatusHTTP';
+import mapStatusHTTP from '../utils/mapStatusHTTP';
 import MatchService from '../services/MatchService';
 
 export default class MatchController {
@@ -41,7 +41,12 @@ export default class MatchController {
   }
 
   public async create(req: Request, res: Response): Promise<Response> {
-    const serviceResponse = await this.matchService.create(req.body);
+    const { user, ...body } = req.body;
+
+    const serviceResponse = await this.matchService.create(body);
+    if (serviceResponse.status !== 'SUCCESSFUL') {
+      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+    }
 
     return res.status(201).json(serviceResponse.data);
   }

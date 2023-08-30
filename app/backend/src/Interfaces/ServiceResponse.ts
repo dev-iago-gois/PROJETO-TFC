@@ -1,6 +1,7 @@
 export interface ServiceMessage { message: string }
 
-type ServiceResponseErrorType = 'INVALID_DATA' | 'UNAUTHORIZED' | 'NOT_FOUND' | 'CONFLICT';
+type ServiceResponseErrorType =
+'INVALID_DATA' | 'UNAUTHORIZED' | 'NOT_FOUND' | 'CONFLICT' | 'UNPROCESSABLE';
 
 export interface ServiceResponseError {
   status: ServiceResponseErrorType,
