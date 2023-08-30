@@ -1,4 +1,3 @@
-// import { NewEntity } from "../Interfaces/ICRUDModel";
 import MatchModel from '../models/MatchModel';
 import { IMatchModel } from '../Interfaces/matches/IMatchModel';
 import { ServiceMessage, ServiceResponse } from '../Interfaces/ServiceResponse';
@@ -34,7 +33,6 @@ export default class MatchService {
   }
 
   async create(match: IMatch): Promise<ServiceResponse<IMatch>> {
-    // console.log(match);
     const { homeTeamId, awayTeamId } = match;
     if (homeTeamId === awayTeamId) {
       return {
@@ -56,12 +54,4 @@ export default class MatchService {
 
     return { status: 'SUCCESSFUL', data: newMatch };
   }
-
-  // async getById(id: number): Promise<ServiceResponse<ITeam>> {
-  //   const team = await this.teamModel.getById(id);
-
-  //   if (!team) return { status: 'NOT_FOUND', data: { message: `Team ${id} not found` } };
-
-  //   return { status: 'SUCCESSFUL', data: team };
-  // }
 }

@@ -2,7 +2,6 @@ import SequelizeTeam from '../database/models/SequelizeTeams';
 import SequelizeMatch from '../database/models/SequelizeMatches';
 import IMatch, { IGoals } from '../Interfaces/matches/IMatch';
 import { IMatchModel } from '../Interfaces/matches/IMatchModel';
-// import { NewEntity } from "../Interfaces/ICRUDModel";
 
 export default class MatchModel implements IMatchModel {
   private model = SequelizeMatch;

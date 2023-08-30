@@ -2,17 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import JWT from '../utils/JWT';
 
 class Validations {
-  // static validateBook(req: Request, res: Response, next: NextFunction): Response | void {
-  //   const book = req.body;
-  //   const requiredKeys = ['title', 'price', 'author', 'isbn'];
-  //   const notFoundKey = requiredKeys.find((key) => !(key in book));
-  //   if (notFoundKey) {
-  //     return res.status(400).json({ message: `${notFoundKey} is required` });
-  //   }
-
-  //   next();
-  // }
-
   static validateLogin(req: Request, res: Response, next: NextFunction): Response | void {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -44,17 +33,6 @@ class Validations {
 
     next();
   }
-
-  // static validateUser(req: Request, res: Response, next: NextFunction): Response | void {
-  //   const user = req.body;
-  //   const requiredKeys = ['email', 'password', 'name'];
-  //   const notFoundKey = requiredKeys.find((key) => !(key in user));
-  //   if (notFoundKey) {
-  //     return res.status(400).json({ message: `${notFoundKey} is required` });
-  //   }
-
-  //   next();
-  // }
 }
 
 export default Validations;

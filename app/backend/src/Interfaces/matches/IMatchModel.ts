@@ -1,9 +1,7 @@
 import IMatch, { IGoals } from './IMatch';
-// import { ICRUDModelReader } from '../ICRUDModel';
 
 export type ID = number;
 
-// TODO REMOVE THIS LATTER
 interface IMatchModelQueryString<T> {
   inProgress(inProgress: string): Promise<T[]>,
   finish(id: number): Promise<string>,

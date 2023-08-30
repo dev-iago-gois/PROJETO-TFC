@@ -17,7 +17,6 @@ export default class MatchController {
   public async inProgress(req: Request, res: Response): Promise<Response> {
     const inProgress = req.query.inProgress as string;
 
-    // casting
     const serviceResponse = await this.matchService.inProgress(JSON.parse(inProgress as string));
 
     return res.status(200).json(serviceResponse.data);
@@ -50,16 +49,4 @@ export default class MatchController {
 
     return res.status(201).json(serviceResponse.data);
   }
-
-  // public async getById(req: Request, res: Response): Promise<Response> {
-  //   const { id } = req.params;
-
-  //   const serviceResponse = await this.teamService.getById(Number(id));
-
-  //   if (serviceResponse.status !== 'SUCCESSFUL') {
-  //     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-  //   }
-
-  //   return res.status(200).json(serviceResponse.data);
-  // }
 }
