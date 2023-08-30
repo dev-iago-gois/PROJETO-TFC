@@ -30,6 +30,12 @@ export default class MatchService {
     return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
   }
 
+  async create(match: IMatch): Promise<ServiceResponse<IMatch>> {
+    const newMatch = await this.matchModel.create(match);
+
+    return { status: 'SUCCESSFUL', data: newMatch };
+  }
+
   // async getById(id: number): Promise<ServiceResponse<ITeam>> {
   //   const team = await this.teamModel.getById(id);
 

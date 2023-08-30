@@ -38,4 +38,10 @@ export default class MatchModel implements IMatchModel {
   async update(id: number, body: IGoals): Promise<void> {
     await this.model.update(body, { where: { id } });
   }
+
+  async create(match: IMatch): Promise<IMatch> {
+    const newMatch = await this.model.create(match);
+
+    return newMatch;
+  }
 }
