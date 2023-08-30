@@ -5,7 +5,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import { allMatches } from './mocks/Match.mocks';
+import { allMatches, inProgressTrue, inProgressFalse } from './mocks/Match.mocks';
 import Validations from '../../src/middlewares/Validations';
 import JWT from '../../src/utils/JWT';
 
@@ -19,8 +19,6 @@ describe('Matches Test', function() {
   it('should return all matches', async function() {
     // Arrange
     sinon.stub(SequelizeMatch, 'findAll').resolves(allMatches as any);
-    sinon.stub(JWT, 'sign').returns('validToken');
-    sinon.stub(Validations, 'validateLogin').returns();
 
     // Act
     const { status, body } = await chai.request(app)
@@ -31,18 +29,49 @@ describe('Matches Test', function() {
     expect(body).to.deep.equal(allMatches);
   });
 
-  // it('should return status 401 and an error message when an incorrect password is provided', async function() {
-  //   sinon.stub(SequelizeUser, 'findOne').resolves(wrongPassUser as any);
-  //   sinon.stub(JWT, 'sign').returns('validToken');
-  //   sinon.stub(Validations, 'validateLogin').returns();
+  it('should return only matches in progress', async function() {
+    // Arrange
+    sinon.stub(SequelizeMatch, 'findAll').resolves(inProgressTrue as any);
 
-  //   const { status, body } = await chai.request(app)
-  //     .post('/login')
-  //     .send(validLoginBody);
+    // Act
+    const { status, body } = await chai.request(app)
+      .get('/matches?inProgress=true');
 
-  //   expect(status).to.equal(401);
-  //   expect(body.message).to.equal('Invalid email or password');
-  // });
+    // Assert
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal(inProgressTrue);
+  });
+
+  it('should return status 200 and message "Finished"', async function() {
+    // Arrange
+    sinon.stub(SequelizeMatch, 'update').resolves();
+    sinon.stub(JWT, 'verify').resolves({ email: 'admin@admin.com' });
+
+    // Act
+    const { status, body } = await chai.request(app)
+      .patch('/matches/41/finish')
+      .set('authorization', 'Bearer VALIDTOKEN');
+
+    // Assert
+    expect(status).to.equal(200);
+    expect(body.message).to.equal('Finished');
+  });
+
+  it('should return status 200 and message "Updated"', async function() {
+    // Arrange
+    sinon.stub(SequelizeMatch, 'update').resolves();
+    sinon.stub(JWT, 'verify').resolves({ email: 'admin@admin.com' });
+
+    // Act
+    const { status, body } = await chai.request(app)
+      .patch('/matches/1')
+      .set('authorization', 'Bearer VALIDTOKEN')
+      .send({ homeTeamGoals: 1, awayTeamGoals: 1 });
+
+    // Assert
+    expect(status).to.equal(200);
+    expect(body.message).to.equal('Updated');
+  });
 
   // it('should return status 401 and an error message when an incorrect email is provided', async function() {
   //   sinon.stub(SequelizeUser, 'findOne').resolves(null);

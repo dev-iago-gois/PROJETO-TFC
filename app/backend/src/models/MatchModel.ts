@@ -30,8 +30,9 @@ export default class MatchModel implements IMatchModel {
     return matches;
   }
 
-  async finish(id: number): Promise<void> {
+  async finish(id: number): Promise<string> {
     await this.model.update({ inProgress: false }, { where: { id } });
+    return 'Finished';
   }
 
   async update(id: number, body: IGoals): Promise<void> {

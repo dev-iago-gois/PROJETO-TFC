@@ -6,7 +6,7 @@ export type ID = number;
 // TODO REMOVE THIS LATTER
 interface IMatchModelQueryString<T> {
   inProgress(inProgress: string): Promise<T[]>,
-  finish(id: number): Promise<void>,
+  finish(id: number): Promise<string>,
   update(id: number, body: IGoals): Promise<void>,
 }
 

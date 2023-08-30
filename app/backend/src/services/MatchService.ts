@@ -20,8 +20,8 @@ export default class MatchService {
   }
 
   async finish(id: number): Promise<ServiceResponse<ServiceMessage>> {
-    await this.matchModel.finish(id);
-    return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
+    const finished = await this.matchModel.finish(id);
+    return { status: 'SUCCESSFUL', data: { message: finished } };
   }
 
   async update(id: number, body: IGoals): Promise<ServiceResponse<ServiceMessage>> {

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import mapStatusHTTP from '../utils/mapStatusHTTP';
+// import mapStatusHTTP from '../utils/mapStatusHTTP';
 import MatchService from '../services/MatchService';
 
 export default class MatchController {
@@ -15,9 +15,8 @@ export default class MatchController {
   }
 
   public async inProgress(req: Request, res: Response): Promise<Response> {
-    const { inProgress } = req.query;
+    const inProgress = req.query.inProgress as string;
 
-    if (!inProgress) return res.status(400).json({ message: 'Missing inProgress query parameter' });
     // casting
     const serviceResponse = await this.matchService.inProgress(JSON.parse(inProgress as string));
 
@@ -37,9 +36,6 @@ export default class MatchController {
     const { homeTeamGoals, awayTeamGoals } = req.body;
 
     const serviceResponse = await this.matchService.update(id, { homeTeamGoals, awayTeamGoals });
-    if (serviceResponse.status !== 'SUCCESSFUL') {
-      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-    }
 
     return res.status(200).json(serviceResponse.data);
   }
