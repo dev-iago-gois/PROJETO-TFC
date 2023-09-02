@@ -17,7 +17,7 @@ export default class MatchController {
   public async inProgress(req: Request, res: Response): Promise<Response> {
     const inProgress = req.query.inProgress as string;
 
-    const serviceResponse = await this.matchService.inProgress(JSON.parse(inProgress as string));
+    const serviceResponse = await this.matchService.inProgress(JSON.parse(inProgress));
 
     return res.status(200).json(serviceResponse.data);
   }

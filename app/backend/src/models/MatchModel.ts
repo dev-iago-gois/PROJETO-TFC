@@ -17,7 +17,7 @@ export default class MatchModel implements IMatchModel {
     return matches;
   }
 
-  async inProgress(inProgress: string): Promise<IMatch[]> {
+  async inProgress(inProgress: boolean): Promise<IMatch[]> {
     const matches = await this.model.findAll({
       where: { inProgress },
       include: [

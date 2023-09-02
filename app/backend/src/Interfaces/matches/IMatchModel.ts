@@ -3,7 +3,7 @@ import IMatch, { IGoals } from './IMatch';
 export type ID = number;
 
 interface IMatchModelQueryString<T> {
-  inProgress(inProgress: string): Promise<T[]>,
+  inProgress(inProgress: boolean): Promise<T[]>,
   finish(id: number): Promise<string>,
   update(id: number, body: IGoals): Promise<void>,
   create(match: IMatch): Promise<T>,
