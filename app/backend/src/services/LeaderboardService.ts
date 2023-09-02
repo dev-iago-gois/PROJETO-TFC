@@ -1,6 +1,4 @@
-// import getOrderTeams from '../utils/getOrderTeams';
-// import getTeams from '../utils/getTeamsInfo';
-import { getFormattedHomeTeam } from '../utils/leaderboard.utils';
+import { compareTeams, getFormattedHomeTeam } from '../utils/leaderboard.utils';
 import TeamModel from '../models/TeamModel';
 import { ITeamModel } from '../Interfaces/teams/ITeamModel';
 import MatchModel from '../models/MatchModel';
@@ -12,7 +10,6 @@ export default class LeaderBoardService {
     private teamModel: ITeamModel = new TeamModel(),
   ) {}
 
-  // eslint-disable-next-line max-lines-per-function
   public async getHome(): Promise<unknown> {
     const allTeamsDb = await this.teamModel.getAll();
     const allFinishedMatchesDb = await this.matchModel.inProgress(false);
@@ -24,17 +21,7 @@ export default class LeaderBoardService {
       );
       return formattedTeam;
     });
-    const sortedHomeLeaderboard = homeLeaderboard.sort((a, b) => {
-      if (a.totalPoints > b.totalPoints) return -1;
-      if (a.totalPoints < b.totalPoints) return 1;
-      if (a.totalVictories > b.totalVictories) return -1;
-      if (a.totalVictories < b.totalVictories) return 1;
-      if (a.goalsBalance > b.goalsBalance) return -1;
-      if (a.goalsBalance < b.goalsBalance) return 1;
-      if (a.goalsFavor > b.goalsFavor) return -1;
-      if (a.goalsFavor < b.goalsFavor) return 1;
-      return 0;
-    });
+    const sortedHomeLeaderboard = homeLeaderboard.sort(compareTeams);
     return sortedHomeLeaderboard;
   }
 }

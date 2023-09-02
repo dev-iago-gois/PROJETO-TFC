@@ -1,3 +1,4 @@
+import ILeaderBoard from '../Interfaces/leaderboards/ILeaderboard';
 import IMatch from '../Interfaces/matches/IMatch';
 
 const teamSchema = {
@@ -34,7 +35,19 @@ const getFormattedHomeTeam = (id: number, teamName: string, allMatches: IMatch[]
   return team;
 };
 
+const compareTeams = (a: ILeaderBoard, b: ILeaderBoard): number => {
+  if (a.totalPoints > b.totalPoints) return -1;
+  if (a.totalPoints < b.totalPoints) return 1;
+  if (a.totalVictories > b.totalVictories) return -1;
+  if (a.totalVictories < b.totalVictories) return 1;
+  if (a.goalsBalance > b.goalsBalance) return -1;
+  if (a.goalsBalance < b.goalsBalance) return 1;
+  if (a.goalsFavor > b.goalsFavor) return -1;
+  if (a.goalsFavor < b.goalsFavor) return 1;
+  return 0;
+};
+
 export {
-  teamSchema,
   getFormattedHomeTeam,
+  compareTeams,
 };
