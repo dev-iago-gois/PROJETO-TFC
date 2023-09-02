@@ -12,12 +12,10 @@ export default class LeaderBoardService {
     private teamModel: ITeamModel = new TeamModel(),
   ) {}
 
+  // eslint-disable-next-line max-lines-per-function
   public async getHome(): Promise<unknown> {
     const allTeamsDb = await this.teamModel.getAll();
-    // console.log(allTeamsDb.length);
     const allFinishedMatchesDb = await this.matchModel.inProgress(false);
-    // console.log(allMatchesDb);
-
     const homeLeaderboard = allTeamsDb.map((team) => {
       const formattedTeam = getFormattedHomeTeam(
         team.id as number,
@@ -26,6 +24,17 @@ export default class LeaderBoardService {
       );
       return formattedTeam;
     });
-    return homeLeaderboard;
+    const sortedHomeLeaderboard = homeLeaderboard.sort((a, b) => {
+      if (a.totalPoints > b.totalPoints) return -1;
+      if (a.totalPoints < b.totalPoints) return 1;
+      if (a.totalVictories > b.totalVictories) return -1;
+      if (a.totalVictories < b.totalVictories) return 1;
+      if (a.goalsBalance > b.goalsBalance) return -1;
+      if (a.goalsBalance < b.goalsBalance) return 1;
+      if (a.goalsFavor > b.goalsFavor) return -1;
+      if (a.goalsFavor < b.goalsFavor) return 1;
+      return 0;
+    });
+    return sortedHomeLeaderboard;
   }
 }
