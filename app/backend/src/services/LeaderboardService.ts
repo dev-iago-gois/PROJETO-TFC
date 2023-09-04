@@ -2,6 +2,7 @@ import {
   compareTeams,
   getFormattedAwayTeam,
   getFormattedHomeTeam,
+  getFormattedTeam,
 } from '../utils/leaderboard.utils';
 import TeamModel from '../models/TeamModel';
 import { ITeamModel } from '../Interfaces/teams/ITeamModel';
@@ -42,5 +43,20 @@ export default class LeaderBoardService {
     });
     const sortedAwayLeaderboard = awayLeaderboard.sort(compareTeams);
     return sortedAwayLeaderboard;
+  }
+
+  public async getLeaderboard(): Promise<unknown> {
+    const allTeamsDb = await this.teamModel.getAll();
+    const allFinishedMatchesDb = await this.matchModel.inProgress(false);
+    const leaderboard = allTeamsDb.map((team) => {
+      const formattedTeam = getFormattedTeam(
+        team.id as number,
+        team.teamName,
+        allFinishedMatchesDb,
+      );
+      return formattedTeam;
+    });
+    const sortedLeaderboard = leaderboard.sort(compareTeams);
+    return sortedLeaderboard;
   }
 }

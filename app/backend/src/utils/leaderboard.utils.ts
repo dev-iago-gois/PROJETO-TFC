@@ -56,6 +56,22 @@ const getFormattedAwayTeam = (id: number, teamName: string, allMatches: IMatch[]
   return team;
 };
 
+const getFormattedTeam = (id: number, teamName: string, allMatches: IMatch[]) => {
+  const homeInfo = getFormattedHomeTeam(id, teamName, allMatches);
+  const awayInfo = getFormattedAwayTeam(id, teamName, allMatches);
+  const team = { ...teamSchema, name: teamName };
+  team.totalGames = homeInfo.totalGames + awayInfo.totalGames;
+  team.totalVictories = homeInfo.totalVictories + awayInfo.totalVictories;
+  team.totalDraws = homeInfo.totalDraws + awayInfo.totalDraws;
+  team.totalLosses = homeInfo.totalLosses + awayInfo.totalLosses;
+  team.goalsFavor = homeInfo.goalsFavor + awayInfo.goalsFavor;
+  team.goalsOwn = homeInfo.goalsOwn + awayInfo.goalsOwn;
+  team.totalPoints = homeInfo.totalPoints + awayInfo.totalPoints;
+  team.goalsBalance = team.goalsFavor - team.goalsOwn;
+  team.efficiency = `${((team.totalPoints / (team.totalGames * 3)) * 100).toFixed(2)}`;
+  return team;
+};
+
 const compareTeams = (a: ILeaderBoard, b: ILeaderBoard): number => {
   if (a.totalPoints > b.totalPoints) return -1;
   if (a.totalPoints < b.totalPoints) return 1;
@@ -71,5 +87,6 @@ const compareTeams = (a: ILeaderBoard, b: ILeaderBoard): number => {
 export {
   getFormattedHomeTeam,
   getFormattedAwayTeam,
+  getFormattedTeam,
   compareTeams,
 };
