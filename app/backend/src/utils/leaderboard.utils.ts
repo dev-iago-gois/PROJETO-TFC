@@ -35,6 +35,27 @@ const getFormattedHomeTeam = (id: number, teamName: string, allMatches: IMatch[]
   return team;
 };
 
+const getFormattedAwayTeam = (id: number, teamName: string, allMatches: IMatch[]) => {
+  const teamMatches = allMatches.filter((match) => match.awayTeamId === id);
+  const team = { ...teamSchema };
+  team.name = teamName; team.totalGames = teamMatches.length;
+  team.totalVictories = teamMatches
+    .filter((match) => match.awayTeamId === id && match.awayTeamGoals > match.homeTeamGoals).length;
+  team.totalDraws = teamMatches
+    .filter((match) => match.awayTeamId === id && match.awayTeamGoals === match.homeTeamGoals)
+    .length;
+  team.totalLosses = teamMatches
+    .filter((match) => match.awayTeamId === id && match.awayTeamGoals < match.homeTeamGoals).length;
+  team.goalsFavor = teamMatches.filter((match) => match.awayTeamId === id)
+    .reduce((acc, match) => acc + match.awayTeamGoals, 0);
+  team.goalsOwn = teamMatches.filter((match) => match.awayTeamId === id)
+    .reduce((acc, match) => acc + match.homeTeamGoals, 0);
+  team.totalPoints = (team.totalVictories * 3) + team.totalDraws;
+  team.goalsBalance = team.goalsFavor - team.goalsOwn;
+  team.efficiency = `${((team.totalPoints / (team.totalGames * 3)) * 100).toFixed(2)}`;
+  return team;
+};
+
 const compareTeams = (a: ILeaderBoard, b: ILeaderBoard): number => {
   if (a.totalPoints > b.totalPoints) return -1;
   if (a.totalPoints < b.totalPoints) return 1;
@@ -49,5 +70,6 @@ const compareTeams = (a: ILeaderBoard, b: ILeaderBoard): number => {
 
 export {
   getFormattedHomeTeam,
+  getFormattedAwayTeam,
   compareTeams,
 };
